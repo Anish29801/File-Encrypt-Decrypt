@@ -1,6 +1,65 @@
-Secure File Transfer ApplicationThis is a simple, secure file transfer application built using Python's tkinter for the graphical user interface (GUI) and socket for network communication. It incorporates RSA and AES encryption to ensure the confidentiality of transferred files. The project is structured with a focus on modularity and adherence to interface-based design principles.Table of ContentsProject OverviewFeaturesPrerequisitesProject StructureSetup and InstallationHow to RunFile ExplanationsInterface Implementation DetailsProject OverviewThe application provides a user-friendly GUI that allows a user to automatically start a server in the background, select a folder where received files will be saved, and send files securely to that server. All activities, including connection attempts, file transfers, and errors, are logged in a dedicated display area within the GUI, which can also be saved to a file.FeaturesSecure File Transfer: Utilizes AES encryption for file data and RSA encryption for the AES key, ensuring end-to-end encryption.Automatic Server Management: The server starts automatically when the GUI application launches and stops gracefully when the application is closed, simplifying usage for non-technical users.User-Friendly Interface: A clean Tkinter GUI with clear, numbered steps and informative messages.Dynamic File Selection: Users can choose any file from their system to send.Dynamic Save Location: Users can specify the folder where received files will be saved on the server side.Comprehensive Logging: All application activities and network communications are displayed in a real-time log window.Log to File: The entire log history can be saved to a timestamped text file in a dedicated Logger folder.Modular Design: Separates concerns into distinct modules (client, server, logger, crypto_utils) and defines interfaces for each, promoting maintainability and extensibility.PrerequisitesBefore running the application, ensure you have Python 3.x installed. You will also need the pycryptodome library for cryptographic operations.To install pycryptodome, open your terminal or command prompt and run:pip install pycryptodome
+Here's a properly formatted **Markdown (`.md`) README** file for your Secure File Transfer Application, including badges and improved layout:
 
-Project StructureThe project should be organized in the following directory structure:secure_file_transfer/
+````md
+# 🔐 Secure File Transfer Application
+
+![Python Version](https://img.shields.io/badge/python-3.x-blue)
+![GUI](https://img.shields.io/badge/Tkinter-GUI-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Encryption](https://img.shields.io/badge/Encryption-AES--256%20%7C%20RSA--2048-critical)
+![Modular Design](https://img.shields.io/badge/design-modular-lightgrey)
+
+A secure file transfer application built with **Python**, using `Tkinter` for the GUI and `socket` for network communication. It ensures confidentiality using **AES** (for data) and **RSA** (for key exchange), and is structured around clean interfaces for modularity and maintainability.
+
+---
+
+## 📑 Table of Contents
+
+- [Project Overview](#project-overview)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Project Structure](#project-structure)
+- [Setup and Installation](#setup-and-installation)
+- [How to Run](#how-to-run)
+- [File Explanations](#file-explanations)
+- [Interface Implementation Details](#interface-implementation-details)
+
+---
+
+## 📌 Project Overview
+
+This GUI-based application allows secure file transfer between a client and server with auto-started server features. It maintains a live log window, encrypts files using RSA and AES, and lets users save logs for future reference.
+
+---
+
+## 🚀 Features
+
+- 🔒 **Secure File Transfer**: AES (data) + RSA (key) encryption.
+- 🖥️ **Auto Server Management**: Starts/stops with the GUI.
+- 📂 **Dynamic File & Folder Selection**: Choose any file/folder.
+- 📜 **Real-time Logging**: Logs connections, transfers, and errors.
+- 🧾 **Log to File**: Save logs to timestamped `.txt` files.
+- 🧩 **Modular Design**: Interface-based separation (`client`, `server`, `crypto_utils`, etc.)
+
+---
+
+## 📦 Prerequisites
+
+- Python 3.x
+- `pycryptodome` library
+
+Install dependencies using:
+
+```bash
+pip install pycryptodome
+````
+
+---
+
+## 🗂️ Project Structure
+
+```
+secure_file_transfer/
 ├── main.py
 ├── server.py
 ├── client.py
@@ -12,10 +71,79 @@ Project StructureThe project should be organized in the following directory stru
     ├── Icrypto_utils.py
     ├── Igui.py
     └── Iserver.py
+```
 
-main.py: The main application script, containing the Tkinter GUI.server.py: Handles the server-side logic for receiving and decrypting files.client.py: Handles the client-side logic for encrypting and sending files.logger.py: Manages the logging functionality, redirecting console output to the GUI and handling log file saving.crypto_utils.py: Provides all cryptographic primitives (AES, RSA, padding).Interfaces/: A directory containing abstract base classes (ABCs) that define interfaces for the main components.Setup and InstallationClone or Download: Get the project files and place them in a directory (e.g., secure_file_transfer/).Install Dependencies: Navigate to the project's root directory in your terminal and install pycryptodome:cd secure_file_transfer
+---
+
+## ⚙️ Setup and Installation
+
+1. **Clone or Download** this repository.
+2. **Navigate** to the root folder:
+
+```bash
+cd secure_file_transfer
+```
+
+3. **Install dependencies**:
+
+```bash
 pip install pycryptodome
+```
 
-Ensure File Structure: Verify that your project directory matches the Project Structure section above, especially the Interfaces folder and its __init__.py file (which makes it a Python package).How to RunOpen Terminal/Command Prompt: Navigate to the secure_file_transfer directory.Run the GUI: Execute the main.py script:python main.py
+4. **Verify structure** as shown in [Project Structure](#project-structure).
 
-Application Workflow:The GUI window will appear, and the server will automatically start in the background. You'll see "Server started successfully..." messages in the log.1. Choose Folder for Received Files: Click this button to select a directory where the server will save any files it receives. If you skip this, files will be saved in a received_files folder in the application's directory.2. Choose Client Download Folder: This button allows you to specify a folder where the client would save files if it had receiving capabilities. (Note: The current client is designed only for sending.)3. Send File to Server: Click this to open a file selection dialog. Choose the file you wish to send. The client will encrypt and send it to the running server.Clear Log Display: Clears the messages in the GUI's log area.Save Log (to Logger Folder): Saves the entire log history to a timestamped .txt file inside a Logger folder (created automatically if it doesn't exist).Closing the Application: Simply close the GUI window. The server will automatically detect the shutdown and terminate gracefully.File Explanationsmain.py:The entry point of the application.Initializes the tkinter GUI.Creates an instance of the Logger class to manage log display and file saving.Automatically starts the server in a separate thread.Handles user interactions through buttons (selecting directories, sending files, clearing/saving logs).Manages the overall application flow and graceful shutdown.server.py:Implements the IServer interface.Manages the server-side network socket (0.0.0.0:9999).Generates RSA key pairs (server_private.pem, server_public.pem) on first run.Listens for incoming client connections.Receives the original filename, encrypted AES key, and encrypted file data from the client.Uses crypto_utils to decrypt the AES key (with RSA) and the file data (with AES).Saves the decrypted file to the specified or default directory.client.py:Implements the IClient interface.Loads the server's public RSA key (server_public.pem) to encrypt the AES key.Generates a unique AES key for each file transfer.Encrypts the file data using AES and the AES key using RSA.Connects to the server and sends the filename, encrypted AES key, and encrypted file data.logger.py:Implements the ILogger interface.Contains the TextRedirector class to redirect sys.stdout and sys.stderr to the GUI's ScrolledText widget, centralizing all console output.Provides methods to append_log messages with timestamps and color-coding, clear_log display, and save_log_to_file in a timestamped format within a Logger directory.crypto_utils.py:Implements the ICryptoUtils interface.Provides core cryptographic functions:generate_aes_key(): Creates a 256-bit AES key.encrypt_file(): Encrypts data using AES in CBC mode (with PKCS7 padding).decrypt_file(): Decrypts AES-CBC encrypted data.generate_rsa_keys(): Generates 2048-bit RSA private and public key pairs.rsa_encrypt(): Encrypts data using RSA (PKCS1_OAEP).rsa_decrypt(): Decrypts data using RSA (PKCS1_OAEP).Interface Implementation DetailsThe project utilizes Python's abc (Abstract Base Classes) module to define clear interfaces for its main components. This promotes a robust and extensible architecture by ensuring that concrete implementations adhere to a defined contract.Interfaces/Iserver.py: Defines the IServer ABC with abstract methods start_server and stop_server.Implementation: The Server class in server.py inherits from IServer and provides concrete implementations for start_server and stop_server.Interfaces/Iclient.py: Defines the IClient ABC with the abstract method send_file.Implementation: The Client class in client.py inherits from IClient and implements the send_file method.Interfaces/Icrypto_utils.py: Defines the ICryptoUtils ABC with abstract methods for padding, unpadding, AES key generation, file encryption/decryption, RSA key generation, and RSA encryption/decryption.Implementation: The CryptoUtils class in crypto_utils.py inherits from ICryptoUtils and implements all these cryptographic utility methods.Interfaces/Igui.py: Defines the IGUI ABC with abstract methods for managing button states, initial setup, log operations, directory selection, server auto-start/status checks, and file sending.Implementation: The FileTransferGUI class in main.py inherits from IGUI and implements all the GUI-related abstract methods.This interface-driven approach makes the codebase more organized, easier to understand, and simplifies future development or modification of individual components without affecting others, as long as the interface contracts are maintained.
+---
+
+## ▶️ How to Run
+
+1. Open your terminal inside the project directory.
+2. Run the GUI app:
+
+```bash
+python main.py
+```
+
+### 🖼️ Application Workflow
+
+1. **Choose Folder for Received Files**
+2. **Choose Client Download Folder** (optional)
+3. **Send File to Server**
+4. **View Logs / Save Logs / Clear Log Display**
+
+The server runs in the background and terminates automatically on exit.
+
+---
+
+## 📂 File Explanations
+
+* **main.py**: Entry point. Tkinter GUI + server auto-start + logging + interactions.
+* **server.py**: Implements `IServer`. Handles connections, decryption, and file saving.
+* **client.py**: Implements `IClient`. Encrypts and sends file to the server.
+* **logger.py**: Implements `ILogger`. Centralized logging with timestamped messages.
+* **crypto\_utils.py**: Implements `ICryptoUtils`. AES and RSA operations.
+* **Interfaces/**: Contains Abstract Base Classes for `client`, `server`, `gui`, and `crypto_utils`.
+
+---
+
+## 🧩 Interface Implementation Details
+
+This application uses Python's `abc` module to define clear interfaces for better structure.
+
+| Interface File     | Description                                            |
+| ------------------ | ------------------------------------------------------ |
+| `Iserver.py`       | `start_server()` and `stop_server()`                   |
+| `Iclient.py`       | `send_file()`                                          |
+| `Icrypto_utils.py` | AES + RSA cryptographic functions                      |
+| `Igui.py`          | GUI state, button control, logging, and file selection |
+
+Each interface ensures that implementations follow a contract, allowing easier testing and scalability.
+
+---
+
+## ✅ Summary
+
+This project showcases a production-style Python GUI application using **AES + RSA encryption**, with real-time logging, auto server management, and clean modular design following interface-based architecture.
+
+> 🛠 Ideal for coursework in **Networks**, **Cryptography**, and **Secure Systems**.
+
+---
