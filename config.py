@@ -1,0 +1,7 @@
+# config.py
+
+SERVER_HOST = '127.0.0.1'
+SERVER_PORT = 9999
+BUFFER_SIZE = 4096
+
+SERVER_PUBLIC_KEY_PATH = 'server_public.pem'
